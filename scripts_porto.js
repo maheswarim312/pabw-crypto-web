@@ -1,37 +1,37 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const addTransactionBtn = document.getElementById('addTransactionBtn');
-    const coinSelectionModal = document.getElementById('coinSelectionModal');
-    const closeCoinSelectionModal = document.getElementById('closeCoinSelectionModal');
-    const transactionDetailModal = document.getElementById('transactionDetailModal');
-    const closeTransactionDetailModal = document.getElementById('closeTransactionDetailModal');
-    const coinList = document.getElementById('coinList');
-    const selectedCoin = document.getElementById('selectedCoin');
-    const transactionForm = document.getElementById('transactionForm');
-    const transactionTable = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
-    const searchCoinInput = document.getElementById('searchCoin');
-    const totalDisplay = document.getElementById('total');
-    const quantityInput = document.getElementById('quantity');
-    const priceInput = document.getElementById('price');
-    const totalAssetsDisplay = document.getElementById('totalAssets');
+    const tombolTambahTransaksi = document.getElementById('addTransactionBtn');
+    const modalPilihanKoin = document.getElementById('coinSelectionModal');
+    const tutupModalPilihanKoin = document.getElementById('closeCoinSelectionModal');
+    const modalDetailTransaksi = document.getElementById('transactionDetailModal');
+    const tutupModalDetailTransaksi = document.getElementById('closeTransactionDetailModal');
+    const daftarKoin = document.getElementById('coinList');
+    const koinTerpilih = document.getElementById('selectedCoin');
+    const formulirTransaksi = document.getElementById('transactionForm');
+    const tabelTransaksi = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
+    const inputCariKoin = document.getElementById('searchCoin');
+    const totalTampilan = document.getElementById('total');
+    const inputKuantitas = document.getElementById('quantity');
+    const inputHarga = document.getElementById('price');
+    const totalAsetTampilan = document.getElementById('totalAssets');
 
-    let coins = [];
-    let currentCoin = null;
-    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    let koin = [];
+    let koinSaatIni = null;
+    let transaksi = JSON.parse(localStorage.getItem('transactions')) || [];
 
-    addTransactionBtn.onclick = function() {
-        fetchCoins();
-        coinSelectionModal.style.display = "block";
+    tombolTambahTransaksi.onclick = function() {
+        ambilKoin();
+        modalPilihanKoin.style.display = "block";
     }
 
-    closeCoinSelectionModal.onclick = function() {
-        coinSelectionModal.style.display = "none";
+    tutupModalPilihanKoin.onclick = function() {
+        modalPilihanKoin.style.display = "none";
     }
 
-    closeTransactionDetailModal.onclick = function() {
-        transactionDetailModal.style.display = "none";
+    tutupModalDetailTransaksi.onclick = function() {
+        modalDetailTransaksi.style.display = "none";
     }
 
-    async function fetchCoins() {
+    async function ambilKoin() {
         try {
             const apiKey = 'b49141f7-287a-45a9-9c16-e7b0a20f746e';
             const response = await fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?convert=IDR', {
@@ -41,111 +41,127 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
             const data = await response.json();
-            coins = data.data;
-            displayCoins(coins);
+            koin = data.data;
+            tampilkanKoin(koin);
         } catch (error) {
             console.error('Error fetching coins:', error);
         }
     }
 
-    function displayCoins(coins) {
-        coinList.innerHTML = '';
-        coins.forEach(coin => {
-            let listItem = document.createElement('li');
-            listItem.innerHTML = `<img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png" alt="${coin.name}" class="crypto-logo"> ${coin.name} (${coin.symbol})`;
-            listItem.onclick = function() {
-                selectCoin(coin);
+    function tampilkanKoin(koin) {
+        daftarKoin.innerHTML = '';
+        koin.forEach(koinItem => {
+            let itemList = document.createElement('li');
+            itemList.innerHTML = `<img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${koinItem.id}.png" alt="${koinItem.name}" class="crypto-logo"> ${koinItem.name} (${koinItem.symbol})`;
+            itemList.onclick = function() {
+                pilihKoin(koinItem);
             }
-            coinList.appendChild(listItem);
+            daftarKoin.appendChild(itemList);
         });
     }
 
-    searchCoinInput.onkeyup = function() {
-        const searchQuery = searchCoinInput.value.toLowerCase();
-        const filteredCoins = coins.filter(coin => coin.name.toLowerCase().includes(searchQuery) || coin.symbol.toLowerCase().includes(searchQuery));
-        displayCoins(filteredCoins);
+    inputCariKoin.onkeyup = function() {
+        const queryCari = inputCariKoin.value.toLowerCase();
+        const koinTersaring = koin.filter(koinItem => koinItem.name.toLowerCase().includes(queryCari) || koinItem.symbol.toLowerCase().includes(queryCari));
+        tampilkanKoin(koinTersaring);
     }
 
-    function selectCoin(coin) {
-        currentCoin = coin;
-        selectedCoin.textContent = `${coin.name} (${coin.symbol})`;
+    function pilihKoin(koinItem) {
+        koinSaatIni = koinItem;
+        koinTerpilih.textContent = `${koinItem.name} (${koinItem.symbol})`;
         document.getElementById('quantity').value = '';
-        document.getElementById('price').value = coin.quote.IDR.price;
-        coinSelectionModal.style.display = "none";
-        transactionDetailModal.style.display = "block";
-        updateTotal();
+        document.getElementById('price').value = koinItem.quote.IDR.price;
+        modalPilihanKoin.style.display = "none";
+        modalDetailTransaksi.style.display = "block";
+        perbaruiTotal();
     }
 
-    function updateTotal() {
-        const quantity = parseFloat(quantityInput.value) || 0;
-        const price = parseFloat(priceInput.value) || 0;
-        const total = quantity * price;
-        totalDisplay.textContent = `Total: ${total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`;
+    function perbaruiTotal() {
+        const kuantitas = parseFloat(inputKuantitas.value) || 0;
+        const harga = parseFloat(inputHarga.value) || 0;
+        const total = kuantitas * harga;
+        totalTampilan.textContent = `Total: ${total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`;
     }
 
-    quantityInput.oninput = updateTotal;
-    priceInput.oninput = updateTotal;
+    inputKuantitas.oninput = perbaruiTotal;
+    inputHarga.oninput = perbaruiTotal;
 
-    transactionForm.onsubmit = function(event) {
+    formulirTransaksi.onsubmit = function(event) {
         event.preventDefault();
-        const quantity = parseFloat(quantityInput.value) || 0;
-        const price = parseFloat(priceInput.value) || 0;
-        const total = quantity * price;
-        const profit = (currentCoin.quote.IDR.price - price) * quantity;
+        const kuantitas = parseFloat(inputKuantitas.value) || 0;
+        const harga = parseFloat(inputHarga.value) || 0;
+        const total = kuantitas * harga;
+        const keuntungan = (koinSaatIni.quote.IDR.price - harga) * kuantitas;
 
-        const transaction = {
-            id: currentCoin.id,
-            name: currentCoin.name,
-            symbol: currentCoin.symbol,
-            currentPrice: currentCoin.quote.IDR.price,
-            percentChange24h: currentCoin.quote.IDR.percent_change_24h,
-            percentChange7d: currentCoin.quote.IDR.percent_change_7d,
-            quantity: quantity,
-            purchasePrice: price,
-            profit: profit
+        const transaksiBaru = {
+            id: koinSaatIni.id,
+            name: koinSaatIni.name,
+            symbol: koinSaatIni.symbol,
+            currentPrice: koinSaatIni.quote.IDR.price,
+            percentChange24h: koinSaatIni.quote.IDR.percent_change_24h,
+            percentChange7d: koinSaatIni.quote.IDR.percent_change_7d,
+            quantity: kuantitas,
+            purchasePrice: harga,
+            profit: keuntungan
         };
 
-        transactions.push(transaction);
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-        addTransactionToTable(transaction);
-        updateTotalAssets();
+        transaksi.push(transaksiBaru);
+        localStorage.setItem('transactions', JSON.stringify(transaksi));
+        tambahkanTransaksiKeTabel(transaksiBaru);
+        perbaruiTotalAset();
 
-        transactionDetailModal.style.display = "none";
+        modalDetailTransaksi.style.display = "none";
     }
 
-    function addTransactionToTable(transaction) {
-        let newRow = transactionTable.insertRow();
-        newRow.innerHTML = `
-            <td><img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${transaction.id}.png" alt="${transaction.name}" class="crypto-logo"> ${transaction.name} (${transaction.symbol})</td>
-            <td>${parseFloat(transaction.currentPrice).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
-            <td>${transaction.percentChange24h}%</td>
-            <td>${transaction.percentChange7d}%</td>
-            <td>${transaction.quantity}</td>
-            <td>${transaction.purchasePrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
-            <td>${transaction.profit.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+    function tambahkanTransaksiKeTabel(transaksiBaru) {
+        let barisBaru = tabelTransaksi.insertRow();
+        barisBaru.innerHTML = `
+            <td><img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${transaksiBaru.id}.png" alt="${transaksiBaru.name}" class="crypto-logo"> ${transaksiBaru.name} (${transaksiBaru.symbol})</td>
+            <td>${parseFloat(transaksiBaru.currentPrice).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+            <td>${transaksiBaru.percentChange24h}%</td>
+            <td>${transaksiBaru.percentChange7d}%</td>
+            <td>${transaksiBaru.quantity}</td>
+            <td>${transaksiBaru.purchasePrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+            <td>${transaksiBaru.profit.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
             <td><button class="deleteBtn">Delete</button></td>
         `;
 
-        newRow.querySelector('.deleteBtn').onclick = function() {
-            const rowIndex = newRow.rowIndex - 1;
-            transactions.splice(rowIndex, 1);
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-            transactionTable.deleteRow(rowIndex);
-            updateTotalAssets();
+        barisBaru.querySelector('.deleteBtn').onclick = function() {
+            const indeksBaris = barisBaru.rowIndex - 1;
+            transaksi.splice(indeksBaris, 1);
+            localStorage.setItem('transactions', JSON.stringify(transaksi));
+            tabelTransaksi.deleteRow(indeksBaris);
+            perbaruiTotalAset();
         };
     }
 
-    function loadTransactions() {
-        transactions.forEach(transaction => {
-            addTransactionToTable(transaction);
+    function muatTransaksi() {
+        transaksi.forEach(transaksiItem => {
+            tambahkanTransaksiKeTabel(transaksiItem);
         });
-        updateTotalAssets();
+        perbaruiTotalAset();
     }
 
-    function updateTotalAssets() {
-        const totalAssets = transactions.reduce((sum, transaction) => sum + (transaction.currentPrice * transaction.quantity), 0);
-        totalAssetsDisplay.textContent = totalAssets.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+    function perbaruiTotalAset() {
+        const totalAset = transaksi.reduce((jumlah, transaksiItem) => jumlah + (transaksiItem.currentPrice * transaksiItem.quantity), 0);
+        totalAsetTampilan.textContent = totalAset.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
     }
 
-    loadTransactions();
+    muatTransaksi();
+
+    let transaksiTersimpan = localStorage.getItem('transactions');
+    let simbol = []; 
+
+    if (transaksiTersimpan) {
+        let transaksiData = JSON.parse(transaksiTersimpan);
+        simbol = transaksiData.map(transaksiItem => transaksiItem.symbol);
+    }
+
+    // Event listener untuk tombol monitor
+    document.getElementById('monitorBtn').addEventListener('click', () => {
+        const simbolString = simbol.join(','); 
+        const monitorUrl = `pantauportofolio.php?coin=${simbolString}`;
+        window.open(monitorUrl, '_blank');
+    });
+
 });
