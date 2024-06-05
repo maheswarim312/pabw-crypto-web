@@ -12,6 +12,7 @@
         <div class="logo">Crypto Vision</div>
         <nav>
             <a href="beranda.php">Home</a>
+            <a href="watchlist.php">Watchlist</a>
             <a href="konversi.php">Konversi Currency</a>
             <a href="info.php">Info Currency</a>
             <a href="portofolio.php">Portofolio</a>
@@ -152,9 +153,28 @@
                         <td class="${coin.quote.IDR.percent_change_24h >= 0 ? 'up' : 'down'}">${parseFloat(coin.quote.IDR.percent_change_24h).toFixed(2)}%</td>
                         <td class="${coin.quote.IDR.percent_change_7d >= 0 ? 'up' : 'down'}">${parseFloat(coin.quote.IDR.percent_change_7d).toFixed(2)}%</td>
                         <td>${parseFloat(coin.quote.IDR.volume_24h).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+                        <td><button class="watchlist-btn" data-coin='${JSON.stringify(coin)}'>+</button></td>
                     `;
                     cryptoTableBody.appendChild(row);
                 });
+
+                document.querySelectorAll('.watchlist-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const coin = JSON.parse(event.target.getAttribute('data-coin'));
+            addToWatchlist(coin);
+        });
+    });
+            }
+
+            function addToWatchlist(coin) {
+                let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+                if (!watchlist.find(c => c.id === coin.id)) {
+                    watchlist.push(coin);
+                    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+                    alert(`${coin.name} telah ditambahkan ke dalam watchlist`);
+                } else {
+                    alert(`${coin.name} telah ada didalam watchlist`);
+                }
             }
 
             function populateHighlights(data) {

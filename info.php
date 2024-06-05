@@ -14,6 +14,7 @@
         <div class="logo">Crypto Vision</div>
         <nav>
             <a href="beranda.php">Home</a>
+            <a href="watchlist.php">Watchlist</a>
             <a href="konversi.php">Konversi Currency</a>
             <a href="info.php">Info Currency</a>
             <a href="portofolio.php">Portofolio</a>
