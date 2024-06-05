@@ -15,6 +15,7 @@
             <a href="watchlist.php">Watchlist</a>
             <a href="konversi.php">Konversi Currency</a>
             <a href="info.php">Info Currency</a>
+            <a href="portofolio.php">Portofolio</a>
         </nav>
         <div class="menu-toggle">☰</div>
     </header>
