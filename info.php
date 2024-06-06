@@ -28,8 +28,7 @@
         </div>
         <div id="konten-default" class="default-content">
             <h2>Selamat datang di Crypto Vision</h2>
-            <p>Masukkan kode koin pada kotak pencarian untuk melihat informasi detail mengenai cryptocurrency favorit
-                Anda.</p>
+            <p>Masukkan kode koin pada kotak pencarian untuk melihat informasi detail mengenai cryptocurrency favorit Anda.</p>
             <p>Contoh: BTC untuk Bitcoin, ETH untuk Ethereum, dll.</p>
         </div>
         <div id="detail-crypto" class="crypto-info" style="display:none;">
@@ -60,6 +59,11 @@
                 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
             </div>
             <!-- TradingView Widget END -->
+            <!-- News Section -->
+            <div id="news-section" class="news-section" style="display:none;">
+                <h2>Berita Terkini tentang <span id="coin-name-news"></span></h2>
+                <div id="news-articles" class="news-articles"></div>
+            </div>
         </div>
         <div id="pesan-error" class="error-message">Kode koin tidak ditemukan. Silakan coba lagi.</div>
     </main>
@@ -71,6 +75,7 @@
                     document.getElementById('konten-default').style.display = 'none';
                     ambilDataCrypto(simbol);
                     updateWidgetTradingView(simbol);
+                    ambilBeritaCrypto(simbol);
                 }
             });
         });
@@ -141,6 +146,48 @@
                 "container_id": "tradingview_charts"
             });
         }
+
+        async function ambilBeritaCrypto(simbol) {
+            const apiKey = '8b64d75ac77a47c6922ab30f6cd23e44'; // Ganti dengan kunci API News Anda
+            const url = `https://newsapi.org/v2/everything?q=${simbol}&apiKey=${apiKey}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    tampilkanBeritaCrypto(data.articles);
+                    document.getElementById('coin-name-news').textContent = simbol;
+                    document.getElementById('news-section').style.display = 'block';
+                } else {
+                    console.error('Error fetching news:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function tampilkanBeritaCrypto(articles) {
+            const newsContainer = document.getElementById('news-articles');
+            newsContainer.innerHTML = '';
+
+            const limitedArticles = articles.slice(0, 6); // Ambil hanya 6 artikel pertama
+
+            limitedArticles.forEach(article => {
+                const newsArticle = document.createElement('div');
+                newsArticle.className = 'news-article';
+
+                newsArticle.innerHTML = `
+                    <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
+                    <p>${article.description}</p>
+                    <span class="news-source">${article.source.name}</span>
+                    <span class="news-date">${new Date(article.publishedAt).toLocaleDateString('id-ID')}</span>
+                `;
+
+                newsContainer.appendChild(newsArticle);
+            });
+        }
+
     </script>
 </body>
 
