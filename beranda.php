@@ -159,10 +159,10 @@
                 });
 
                 document.querySelectorAll('.watchlist-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const coin = JSON.parse(event.target.getAttribute('data-coin'));
-            addToWatchlist(coin);
-        });
+                    button.addEventListener('click', (event) => {
+                        const coin = JSON.parse(event.target.getAttribute('data-coin'));
+                        addToWatchlist(coin);
+                    });
     });
             }
 

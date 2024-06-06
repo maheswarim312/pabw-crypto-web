@@ -143,8 +143,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function updateTotalAssets() {
-        const totalAssets = transactions.reduce((sum, transaction) => sum + (transaction.currentPrice * transaction.quantity), 0);
-        totalAssetsDisplay.textContent = totalAssets.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+        let totalAssets = 0;
+        for (let i = 0; i < transactions.length; i++) {
+            totalAssets += transactions[i].currentPrice * transactions[i].quantity;
+        }
+        totalAssetsDisplay.textContent = totalAssets.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
     }
 
     loadTransactions();
