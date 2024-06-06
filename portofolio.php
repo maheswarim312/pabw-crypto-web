@@ -24,6 +24,7 @@
             <h2>Portofolio Crypto</h2>
             <h3>Total Aset: <span id="totalAssets">Rp 0</span></h3>
             <button id="addTransactionBtn" class="btn-tambah">+ Add Transaction</button>
+            <p id="symbolsList"></p>
             <table id="transactionTable">
                 <thead>
                     <tr>
@@ -41,6 +42,7 @@
                     <!-- Transaction rows will be added here -->
                 </tbody>
             </table>
+            <button id="monitorBtn">Pantau</button>
         </div>
     </main>
 

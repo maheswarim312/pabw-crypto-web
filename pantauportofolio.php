@@ -1,162 +1,362 @@
 <?php
-$coins = isset($_GET['coins']) ? $_GET['coins'] : [];
+
+$koin = explode(",",$_GET['coin']);
+$num = count($koin);
 ?>
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" class="sid-plesk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor Portofolio</title>
-    <style>
-        .container {
-            width: 90%;
-            margin: 0 auto;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .grid-item {
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            background-color: #f9f9f9;
-        }
-        .suggestion {
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
-        .ticker-tape {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-    </style>
+    <title>Coin Pantau</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+	<style>
+		body{
+			background:#000;
+		}
+		#left{
+			float:left;
+			width:60%;
+			height:96%;
+			margin:none;
+			padding:none;
+		}
+		#div30{
+			float:left;
+			width:33%;
+			height:calc(50% + 16px)
+		}
+		#right{
+			float:left;
+			width:40%;
+			height:50%;
+			margin:none;
+			padding:none;
+		}
+		#right2{
+			float:left;
+			width:40%;
+			height:50%;
+			margin-top:-32px;
+			padding:none;
+		}
+		#right2a{
+			float:left;
+			width:50%;
+			height:100%;
+			margin-top:-5px;
+			padding:none;
+		}
+		#ticker{
+			float:left;
+			width:100%;
+			height:50px;
+			margin-top:-32px;
+		}
+	</style>
+	<script type="text/javascript">
+			function zoom() {
+				document.body.style.zoom = "80%" 
+			}
+	</script>
 </head>
-<body>
-    <div class="container">
-        <h2>Monitor Portofolio</h2>
-        <div class="grid-container">
-            <!-- TradingView Widgets BEGIN -->
-            <?php foreach ($coins as $coinData): list($coin, $amount) = explode(',', $coinData); ?>
-                <div class="grid-item">
-                    <h3><?php echo strtoupper($coin); ?></h3>
-                    <p>Jumlah: <?php echo $amount; ?></p>
+<body onload="zoom()">
 
-                    <div class="tradingview-widget-container">
-                        <div id="tradingview-widget-<?php echo $coin; ?>"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                        {
-                            "symbols": [
-                                [
-                                    "BINANCE:<?php echo strtoupper($coin); ?>USD"
-                                ]
-                            ],
-                            "width": "100%",
-                            "height": "150",
-                            "locale": "en",
-                            "colorTheme": "light",
-                            "isTransparent": false,
-                            "autosize": true,
-                            "showVolume": true,
-                            "showMA": true,
-                            "hideDateRanges": false,
-                            "hideMarketStatus": false,
-                            "hideSymbolLogo": false,
-                            "largeChartUrl": ""
-                        }
-                        </script>
-                    </div>
+	<div id="left">
+		<div id="div30" >
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+			  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+			  {
+			  "autosize": true,
+			  "symbol": "BINANCE:<?php echo $koin[0]."USDT"; ?>",
+			  "interval": "60",
+			  "timezone": "Asia/Jakarta",
+			  "theme": "dark",
+			  "style": "1",
+			  "locale": "id",
+			  "enable_publishing": false,
+			  "allow_symbol_change": true,
+			  "studies": [
+				"STD;RSI",
+				"STD;Stochastic_RSI"
+			  ],
+			  "support_host": "https://www.tradingview.com"
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->
+		</div>
 
-                    <div class="tradingview-widget-container">
-                        <div id="technical-analysis-widget-<?php echo $coin; ?>"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                        {
-                            "interval": "1m",
-                            "width": "100%",
-                            "isTransparent": false,
-                            "height": "300",
-                            "symbol": "BINANCE:<?php echo strtoupper($coin); ?>USD",
-                            "showIntervalTabs": true,
-                            "locale": "en",
-                            "colorTheme": "light"
-                        }
-                        </script>
-                    </div>
+		
+		<div id="div30" >
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+			  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+			  {
+			  "autosize": true,
+			  "symbol": "BINANCE:<?php echo $koin[1]."USDT"; ?>",
+			  "interval": "D",
+			  "timezone": "Asia/Jakarta",
+			  "theme": "dark",
+			  "style": "1",
+			  "locale": "id",
+			  "enable_publishing": false,
+			  "allow_symbol_change": true,
+			  "studies": [
+				"STD;RSI",
+				"STD;Stochastic_RSI"
+			  ],
+			  "support_host": "https://www.tradingview.com"
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->
+		</div>
 
-                    <div class="tradingview-widget-container">
-                        <div id="tradingview-widget-chart-<?php echo $coin; ?>"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-                        {
-                            "symbol": "BINANCE:<?php echo strtoupper($coin); ?>USD",
-                            "width": "100%",
-                            "height": "400",
-                            "locale": "en",
-                            "dateRange": "1D",
-                            "colorTheme": "light",
-                            "trendLineColor": "rgba(41, 98, 255, 1)",
-                            "underLineColor": "rgba(41, 98, 255, 0.3)",
-                            "isTransparent": false,
-                            "autosize": true,
-                            "largeChartUrl": ""
-                        }
-                        </script>
-                    </div>
+		
+		<div id="div30" >
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+			  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+			  {
+			  "autosize": true,
+			  "symbol": "BINANCE:<?php echo $koin[2]."USDT"; ?>",
+			  "interval": "D",
+			  "timezone": "Asia/Jakarta",
+			  "theme": "dark",
+			  "style": "1",
+			  "locale": "id",
+			  "enable_publishing": false,
+			  "allow_symbol_change": true,
+			  "studies": [
+				"STD;RSI",
+				"STD;Stochastic_RSI"
+			  ],
+			  "support_host": "https://www.tradingview.com"
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->
+		</div>
 
-                    <div class="suggestion" id="suggestion-<?php echo $coin; ?>">
-                        <!-- Saran jual atau tidak akan ditampilkan di sini -->
-                    </div>
+		
+		<div id="div30" style=margin-top:-32px;>
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+			  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+			  {
+			  "autosize": true,
+			  "symbol": "BINANCE:<?php echo $koin[3]."USDT"; ?>",
+			  "interval": "D",
+			  "timezone": "Asia/Jakarta",
+			  "theme": "dark",
+			  "style": "1",
+			  "locale": "id",
+			  "enable_publishing": false,
+			  "allow_symbol_change": true,
+			  "studies": [
+				"STD;RSI",
+				"STD;Stochastic_RSI"
+			  ],
+			  "support_host": "https://www.tradingview.com"
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->
+		</div>
 
-                    <script>
-                        const apiKey = 'cb538ba5-9fda-4545-8adc-c4046cc91589';
-                        const coin = '<?php echo strtoupper($coin); ?>';
-                        const amount = <?php echo $amount; ?>;
+		
+		<div id="div30" style=margin-top:-32px;>
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+			  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+			  {
+			  "autosize": true,
+			  "symbol": "BINANCE:<?php echo $koin[4]."USDT"; ?>",
+			  "interval": "D",
+			  "timezone": "Asia/Jakarta",
+			  "theme": "dark",
+			  "style": "1",
+			  "locale": "id",
+			  "enable_publishing": false,
+			  "allow_symbol_change": true,
+			  "studies": [
+				"STD;RSI",
+				"STD;Stochastic_RSI"
+			  ],
+			  "support_host": "https://www.tradingview.com"
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->
+		</div>
 
-                        fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${coin}&CMC_PRO_API_KEY=${apiKey}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const price = data.data[coin].quote.USD.price;
-                                const totalValue = price * amount;
-                                const suggestionElement = document.getElementById(`suggestion-${coin}`);
+		
+		<div id="div30" style=margin-top:-32px;>
+			<!-- TradingView Widget BEGIN -->
+			<div class="tradingview-widget-container">
+			  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+			  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+			  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+			  {
+			  "autosize": true,
+			  "symbol": "BINANCE:<?php echo $koin[5]."USDT"; ?>",
+			  "interval": "D",
+			  "timezone": "Asia/Jakarta",
+			  "theme": "dark",
+			  "style": "1",
+			  "locale": "id",
+			  "enable_publishing": false,
+			  "allow_symbol_change": true,
+			  "studies": [
+				"STD;RSI",
+				"STD;Stochastic_RSI"
+			  ],
+			  "support_host": "https://www.tradingview.com"
+			}
+			  </script>
+			</div>
+			<!-- TradingView Widget END -->
+		</div>
 
-                                if (price > 10000) { // Misalnya, saran jual jika harga lebih dari 10,000 USD
-                                    suggestionElement.textContent = `Harga saat ini adalah ${price.toFixed(2)} USD. Pertimbangkan untuk menjual coin Anda.`;
-                                } else {
-                                    suggestionElement.textContent = `Harga saat ini adalah ${price.toFixed(2)} USD. Pertahankan coin Anda.`;
-                                }
-                            })
-                            .catch(error => console.error('Error:', error));
-                    </script>
-                </div>
-            <?php endforeach; ?>
-            <!-- TradingView Widgets END -->
-        </div>
-    </div>
+		
+	</div>
+	<div id="right">
+		<div id="right2a">
+		<!-- TradingView Widget BEGIN -->
+		<div class="tradingview-widget-container">
+		  <div class="tradingview-widget-container__widget"></div>
+		  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+		  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+		  {
+		  "interval": "1h",
+		  "width": "100%",
+		  "isTransparent": true,
+		  "height": "100%",
+		  "symbol": "BINANCE:<?php echo $koin[0]."USDT"; ?>",
+		  "showIntervalTabs": true,
+		  "displayMode": "single",
+		  "locale": "id",
+		  "colorTheme": "dark"
+		}
+		  </script>
+		</div>
+		<!-- TradingView Widget END -->
+		</div>
+		<div id="right2a">
+		<!-- TradingView Widget BEGIN -->
+		<div class="tradingview-widget-container">
+		  <div class="tradingview-widget-container__widget"></div>
+		  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+		  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+		  {
+		  "interval": "1h",
+		  "width": "100%",
+		  "isTransparent": true,
+		  "height": "100%",
+		  "symbol": "BINANCE:<?php echo $koin[1]."USDT"; ?>",
+		  "showIntervalTabs": true,
+		  "displayMode": "single",
+		  "locale": "id",
+		  "colorTheme": "dark"
+		}
+		  </script>
+		</div>
+		<!-- TradingView Widget END -->
+		</div>
+	</div>
+	<div id="right2">
+		<div id="right2a">
+		<!-- TradingView Widget BEGIN -->
+		<div class="tradingview-widget-container">
+		  <div class="tradingview-widget-container__widget"></div>
+		  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+		  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+		  {
+		  "interval": "1h",
+		  "width": "100%",
+		  "isTransparent": true,
+		  "height": "100%",
+		  "symbol": "BINANCE:<?php echo $koin[2]."USDT"; ?>",
+		  "showIntervalTabs": true,
+		  "displayMode": "single",
+		  "locale": "id",
+		  "colorTheme": "dark"
+		}
+		  </script>
+		</div>
+		<!-- TradingView Widget END -->
+		</div>
+		<div id="right2a">
+		<!-- TradingView Widget BEGIN -->
+		<div class="tradingview-widget-container">
+		  <div class="tradingview-widget-container__widget"></div>
+		  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+		  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+		  {
+		  "interval": "1h",
+		  "width": "100%",
+		  "isTransparent": true,
+		  "height": "100%",
+		  "symbol": "BINANCE:<?php echo $koin[3]."USDT"; ?>",
+		  "showIntervalTabs": true,
+		  "displayMode": "single",
+		  "locale": "id",
+		  "colorTheme": "dark"
+		}
+		  </script>
+		</div>
+		<!-- TradingView Widget END -->
+		</div>
+	</div>
+	<div id="ticker">
+		
+			<!-- TradingView Widget BEGIN -->
+		<div class="tradingview-widget-container">
+		  <div class="tradingview-widget-container__widget"></div>
+		  <div class="tradingview-widget-copyright"><a href="https://id.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text" style="visibility:hidden;">Lacak seluruh pasar di TradingView</span></a></div>
+		  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+		  {
+		   "symbols": [
+    <?php
+        $i=0;
+        foreach($koin as $coin){
+            $i++;
+    ?>
+    {
+      "description": "",
+      "proName": "<?php echo $coin."USDT"; ?>"
+    }
+    <?php
+        if($i!=$num)
+            echo ",";
+        }
+    ?>
+  ],
+		  "showSymbolLogo": true,
+		  "isTransparent": false,
+		  "displayMode": "adaptive",
+		  "colorTheme": "dark",
+		  "locale": "id"
+		}
+		  </script>
+		</div>
+		<!-- TradingView Widget END -->
+	
+	</div>
 
-    <!-- Ticker Tape Widget -->
-    <div class="ticker-tape">
-        <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-            {
-                "symbols": [
-                    { "proName": "BINANCE:BTCUSD", "title": "Bitcoin" },
-                    { "proName": "BINANCE:ETHUSD", "title": "Ethereum" },
-                    { "proName": "BINANCE:XRPUSD", "title": "Ripple" },
-                    { "proName": "BINANCE:ADAUSD", "title": "Cardano" },
-                    { "proName": "BINANCE:SOLUSD", "title": "Solana" }
-                ],
-                "showSymbolLogo": true,
-                "colorTheme": "dark",
-                "isTransparent": true,
-                "displayMode": "adaptive",
-                "locale": "en"
-            }
-            </script>
-        </div>
-    </div>
+
 </body>
 </html>

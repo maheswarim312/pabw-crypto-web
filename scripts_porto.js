@@ -148,4 +148,21 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     loadTransactions();
+
+    let storedTransactions = localStorage.getItem('transactions');
+    let symbols = []; 
+
+    if (storedTransactions) {
+        let transactions = JSON.parse(storedTransactions);
+        symbols = transactions.map(transaction => transaction.symbol);
+    }
+
+    // Event listener untuk tombol monitor
+    document.getElementById('monitorBtn').addEventListener('click', () => {
+        const symbolsString = symbols.join(','); 
+        const monitorUrl = `pantauportofolio.php?coin=${symbolsString}`;
+        window.open(monitorUrl, '_blank');
+    });
+
+
 });
